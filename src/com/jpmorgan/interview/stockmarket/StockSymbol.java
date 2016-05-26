@@ -43,4 +43,29 @@ public final class StockSymbol {
 	public String toString() {
 		return super.toString();
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((stockSymbol == null) ? 0 : stockSymbol.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		StockSymbol other = (StockSymbol) obj;
+		if (stockSymbol == null) {
+			if (other.stockSymbol != null)
+				return false;
+		} else if (!stockSymbol.equals(other.stockSymbol))
+			return false;
+		return true;
+	}
 }
