@@ -13,7 +13,7 @@ import com.jpmorgan.interview.stockmarket.exception.StockServiceException;
  *
  * @version $Revision: 1.0 $
  */
-public interface StockService {
+public interface IStockService {
 
 	/**
 	 * Registers a stock with the stock register

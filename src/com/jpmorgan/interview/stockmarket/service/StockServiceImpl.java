@@ -17,7 +17,7 @@ import com.jpmorgan.interview.stockmarket.exception.StockServiceException;
  *
  * @version $Revision: 1.0 $
  */
-public class StockServiceImpl implements StockService {
+public class StockServiceImpl implements IStockService {
 
 	private final StockRegister stockRegister = new StockRegister();
 	private final StockSymbols stockSymbols = new StockSymbols();
@@ -39,7 +39,7 @@ public class StockServiceImpl implements StockService {
 	 * 
 	 * @throws StockServiceException
 	 *             * @see
-	 *             com.jpmorgan.interview.stockmarket.service.StockService#
+	 *             com.jpmorgan.interview.stockmarket.service.IStockService#
 	 *             registerStock(String, StockType, BigDecimal, BigDecimal,
 	 *             double)
 	 */

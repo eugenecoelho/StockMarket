@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import com.jpmorgan.interview.stockmarket.exception.ErrorCodes;
 import com.jpmorgan.interview.stockmarket.exception.StockServiceException;
-import com.jpmorgan.interview.stockmarket.service.StockService;
+import com.jpmorgan.interview.stockmarket.service.IStockService;
 import com.jpmorgan.interview.stockmarket.service.StockServiceImpl;
 
 /**
@@ -24,7 +24,7 @@ import com.jpmorgan.interview.stockmarket.service.StockServiceImpl;
  */
 public class TestStockRegistration {
 
-	StockService stockService;
+	IStockService stockService;
 
 	@Before
 	public void initTest() {
