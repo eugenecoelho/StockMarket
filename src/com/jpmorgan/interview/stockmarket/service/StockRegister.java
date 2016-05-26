@@ -4,9 +4,11 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -42,8 +44,9 @@ public class StockRegister {
 
 	private static final Logger LOGGER = Logger.getLogger(StockRegister.class.getName());
 
-	private final Map<StockSymbol, IStock> register = new HashMap<StockSymbol, IStock>();
-	private ArrayList<ITrade> trades = new ArrayList<ITrade>();
+	private final Map<StockSymbol, IStock> register = new ConcurrentHashMap<StockSymbol, IStock>();
+	
+	private List<ITrade> trades =  Collections.synchronizedList(new ArrayList<ITrade>());
 
 	/**
 	 * TODO Add return status to notify the consumer of success
@@ -183,7 +186,10 @@ public class StockRegister {
 	 */
 	public BigDecimal getVolumneWeightedStockPrice(StockSymbol stockSymbol, int minutes) throws StockRegisterException {
 		checkStockRegistration(stockSymbol);
-		List<ITrade> filteredList = getRecentTrades(stockSymbol, minutes, trades);
+		List<ITrade> filteredList;  
+		synchronized (trades) {
+			filteredList = getRecentTrades(stockSymbol, minutes, trades);	
+		}
 		BigDecimal stockPrice = calculateStockPrice(filteredList);
 		return stockPrice;
 	}
@@ -227,17 +233,17 @@ public class StockRegister {
 	 * 
 	 * @return List<ITrade>
 	 */
-	private List<ITrade> getRecentTrades(StockSymbol stockSymbol, int minutes, final List<ITrade> trades2) {
+	private List<ITrade> getRecentTrades(StockSymbol stockSymbol, int minutes, final List<ITrade> listOfTrades) {
 		List<ITrade> filteredTrades = null;
 		if (minutes > 0) {
 			final Calendar dateRange = Calendar.getInstance();
 			dateRange.add(Calendar.MINUTE, -minutes);
-			filteredTrades = trades2.stream()
+			filteredTrades = listOfTrades.stream()
 					.filter(trade -> trade.getStockSymbol().equals(stockSymbol)
 							&& dateRange.getTime().compareTo(trade.getTradetimestamp()) <= 0)
 					.collect(Collectors.toList());
 		} else {
-			filteredTrades = trades2.stream().filter(trade -> trade.getStockSymbol().equals(stockSymbol))
+			filteredTrades = listOfTrades.stream().filter(trade -> trade.getStockSymbol().equals(stockSymbol))
 					.collect(Collectors.toList());
 		}
 		// logger.log(Level.INFO,"Filtered Trades ["+stockSymbol+","+minutes+"]:
