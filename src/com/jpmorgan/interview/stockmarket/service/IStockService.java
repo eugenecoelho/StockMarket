@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import com.jpmorgan.interview.stockmarket.Indicator;
 import com.jpmorgan.interview.stockmarket.StockType;
+import com.jpmorgan.interview.stockmarket.exception.ErrorCodes;
 import com.jpmorgan.interview.stockmarket.exception.StockServiceException;
 
 /**
@@ -29,7 +30,11 @@ public interface IStockService {
 	 * @param lastDividend
 	 * @param fixedDividendPercentage
 	 * 
-	 * @throws StockServiceException
+	 * @throws StockServiceException contains Error Code 
+	 *         {@link ErrorCodes#INVALID_PARVALUE_AMOUNT}
+	 *         {@link ErrorCodes#INVALID_DIVIDEND_PERCENTAGE}
+	 *         {@link ErrorCodes#INVALID_DIVIDEND_PERCENTAGE}
+	 *         {@link ErrorCodes#DUPLICATE_STOCK_REGISTRATION}
 	 */
 	public void registerStock(String stockSymbol, StockType stockType, BigDecimal parValue, BigDecimal lastDividend,
 			double fixedDividendPercentage) throws StockServiceException;
@@ -56,8 +61,10 @@ public interface IStockService {
 	 * 
 	 * 
 	 * 
-	 * @return BigDecimal * @throws StockServiceException
+	 * @return BigDecimal 
+	 * @throws StockServiceException
 	 *         {@link ErrorCodes#STOCK_NOT_REGISTERED}
+	 *         {@link ErrorCodes#INVALID_STOCK_PRICE}
 	 */
 	public BigDecimal getDividendYield(String stockSymbol, BigDecimal stockPrice) throws StockServiceException;
 
@@ -75,7 +82,10 @@ public interface IStockService {
 	 * 
 	 * 
 	 * 
-	 * @return BigDecimal * @throws StockServiceException
+	 * @return BigDecimal 
+	 * @throws StockServiceException
+	 *         {@link ErrorCodes#STOCK_NOT_REGISTERED}
+	 *         {@link ErrorCodes#INVALID_STOCK_PRICE}
 	 */
 	public BigDecimal getPERatio(String stockSymbol, BigDecimal stockPrice) throws StockServiceException;
 
@@ -97,7 +107,11 @@ public interface IStockService {
 	 * @param price
 	 * 
 	 * 
-	 * @return boolean * @throws StockServiceException
+	 * @return boolean 
+	 * @throws StockServiceException
+	 *         {@link ErrorCodes#STOCK_NOT_REGISTERED}
+	 *         {@link ErrorCodes#INVALID_TRADE_QUANTITY}
+	 *         {@link ErrorCodes#INVALID_STOCK_PRICE}
 	 */
 	public boolean setTrade(String stockSymbol, int noOfshares, Indicator indicator, BigDecimal price)
 			throws StockServiceException;
@@ -111,7 +125,9 @@ public interface IStockService {
 	 *            int
 	 * 
 	 * 
-	 * @return BigDecimal * @throws StockServiceException
+	 * @return BigDecimal 
+	 * @throws StockServiceException
+   	 *         {@link ErrorCodes#STOCK_NOT_REGISTERED}
 	 */
 	public BigDecimal getVolumneWeightedStockPrice(String stockSymbol, int minutes) throws StockServiceException;
 
@@ -119,7 +135,8 @@ public interface IStockService {
 	 * getAllShareIndex Method to provide getAllShareIndex using geometric mean
 	 * 
 	 * 
-	 * @return Double * @throws StockServiceException
+	 * @return Double 
+	 * @throws StockServiceException if there is a calculation error 
 	 */
 	public Double getAllShareIndex() throws StockServiceException;
 

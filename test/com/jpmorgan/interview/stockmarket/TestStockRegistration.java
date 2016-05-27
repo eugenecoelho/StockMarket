@@ -1,6 +1,7 @@
 package com.jpmorgan.interview.stockmarket;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.math.BigDecimal;
 
@@ -105,17 +106,27 @@ public class TestStockRegistration {
 		}
 	}
 
-	/*
-	 * @Test public void testValidStockRegistration() { try {
-	 * stockService.registerStock("TEA", StockType.COMMON,
-	 * BigDecimal.valueOf(0.100), 0.00); } catch (StockServiceException e) {
-	 * fail(e.getMessage()); } }
-	 * 
-	 * @Test public void testDuplicateStockRegistration() { try {
-	 * stockService.registerStock("TEA", StockType.COMMON,
-	 * BigDecimal.valueOf(0.100), 0.00); } catch (StockServiceException e) {
-	 * assertEquals(StockRegistrationErrorCode.DUPLICATE_STOCK_REGISTRATION,
-	 * e.getErrorCode()); } }
-	 */
+	@Test
+	public void testValidStockRegistration() {
+		try {
+			stockService.registerStock("TSR8", StockType.PREFERRED, BigDecimal.valueOf(0.100),
+					BigDecimal.valueOf(1.000), 1.00);
+		} catch (StockServiceException e) {
+			fail("Stock registration failed");
+		}
+	}
+
+	@Test
+	public void testDuplicateStockRegistration() {
+		try {
+			stockService.registerStock("TSR9", StockType.PREFERRED, BigDecimal.valueOf(0.100),
+					BigDecimal.valueOf(1.000), 1.00);
+			stockService.registerStock("TSR9", StockType.PREFERRED, BigDecimal.valueOf(0.100),
+					BigDecimal.valueOf(1.000), 1.00);
+		} catch (StockServiceException e) {
+			assertEquals(ErrorCodes.DUPLICATE_STOCK_REGISTRATION, e.getErrorCode());
+		}
+	}
+	 
 
 }
