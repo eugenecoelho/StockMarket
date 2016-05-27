@@ -57,7 +57,7 @@ public class StockServiceImpl implements IStockService {
 			stockRegister.register(stockSymbols.lookup(stockSymbol), stockType, Money.valueOf(parValue),
 					Money.valueOf(lastDividend), fixedDividendPercentage);
 		} catch (StockRegisterException e) {
-			LOGGER.log(Level.FINE,"Stock Registeration exception ["+stockSymbol+" "+stockType+"  "+parValue+"  "+lastDividend+" "+fixedDividendPercentage+"]:"+e.getErrorCode());  
+			LOGGER.log(Level.FINE,"Stock Registeration exception["+stockSymbol+" "+stockType+"  "+parValue+"  "+lastDividend+" "+fixedDividendPercentage+"]:"+e.getErrorCode());  
 			throw new StockServiceException(e.getErrorCode());
 		}
 	}
