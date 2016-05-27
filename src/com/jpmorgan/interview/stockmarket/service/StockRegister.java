@@ -5,11 +5,9 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import com.jpmorgan.interview.stockmarket.Constant;
@@ -41,8 +39,6 @@ import com.jpmorgan.interview.stockmarket.exception.StockRegisterException;
  * @version $Revision: 1.0 $
  */
 public class StockRegister {
-
-	private static final Logger LOGGER = Logger.getLogger(StockRegister.class.getName());
 
 	private final Map<StockSymbol, IStock> register = new ConcurrentHashMap<StockSymbol, IStock>();
 	
@@ -246,8 +242,6 @@ public class StockRegister {
 			filteredTrades = listOfTrades.stream().filter(trade -> trade.getStockSymbol().equals(stockSymbol))
 					.collect(Collectors.toList());
 		}
-		// logger.log(Level.INFO,"Filtered Trades ["+stockSymbol+","+minutes+"]:
-		// "+filteredTrades.size());
 		return filteredTrades;
 	}
 

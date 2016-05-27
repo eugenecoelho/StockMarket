@@ -1,6 +1,8 @@
 package com.jpmorgan.interview.stockmarket.service;
 
 import java.math.BigDecimal;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.jpmorgan.interview.stockmarket.Indicator;
 import com.jpmorgan.interview.stockmarket.Money;
@@ -18,7 +20,12 @@ import com.jpmorgan.interview.stockmarket.exception.StockServiceException;
  * @version $Revision: 1.0 $
  */
 public class StockServiceImpl implements IStockService {
-
+	
+	/**
+	 * Logger for exceptions
+	 */
+	private static final Logger LOGGER = Logger.getLogger(StockServiceImpl.class.getName());
+	
 	private final StockRegister stockRegister = new StockRegister();
 	private final StockSymbols stockSymbols = new StockSymbols();
 
@@ -50,6 +57,7 @@ public class StockServiceImpl implements IStockService {
 			stockRegister.register(stockSymbols.lookup(stockSymbol), stockType, Money.valueOf(parValue),
 					Money.valueOf(lastDividend), fixedDividendPercentage);
 		} catch (StockRegisterException e) {
+			LOGGER.log(Level.FINE,"Stock Registeration exception ["+stockSymbol+" "+stockType+"  "+parValue+"  "+lastDividend+" "+fixedDividendPercentage+"]:"+e.getErrorCode());  
 			throw new StockServiceException(e.getErrorCode());
 		}
 	}
@@ -72,9 +80,8 @@ public class StockServiceImpl implements IStockService {
 	public BigDecimal getDividendYield(String stockSymbol, BigDecimal stockPrice) throws StockServiceException {
 		try {
 			return stockRegister.getDividendYield(stockSymbols.lookup(stockSymbol), Money.valueOf(stockPrice));
-		} catch (StockRegisterException e) {
-			throw new StockServiceException(e.getErrorCode());
-		} catch (CalculationException e) {
+		} catch (StockRegisterException | CalculationException e) {
+			LOGGER.log(Level.FINE,"Get DividendYield exception ["+stockSymbol+" "+stockPrice+"]:"+e.getErrorCode());
 			throw new StockServiceException(e.getErrorCode());
 		}
 	}
@@ -97,9 +104,8 @@ public class StockServiceImpl implements IStockService {
 	public BigDecimal getPERatio(String stockSymbol, BigDecimal stockPrice) throws StockServiceException {
 		try {
 			return stockRegister.getPERatio(stockSymbols.lookup(stockSymbol), Money.valueOf(stockPrice));
-		} catch (StockRegisterException e) {
-			throw new StockServiceException(e.getErrorCode());
-		} catch (CalculationException e) {
+		} catch (StockRegisterException | CalculationException e) {
+			LOGGER.log(Level.FINE,"Get PE Ratio exception ["+stockSymbol+" "+stockPrice+"]:"+e.getErrorCode());
 			throw new StockServiceException(e.getErrorCode());
 		}
 	}
@@ -128,7 +134,8 @@ public class StockServiceImpl implements IStockService {
 		try {
 			return stockRegister.setTrade(stockSymbols.lookup(stockSymbol), noOfshares, Money.valueOf(price),
 					indicator);
-		} catch (StockRegisterException | CreateTradeException e) {
+		} catch (StockRegisterException | CreateTradeException e ) {
+			LOGGER.log(Level.FINE,"set trade exception ["+stockSymbol+" "+noOfshares+" "+indicator+" "+price+"]:"+e.getErrorCode());
 			throw new StockServiceException(e.getErrorCode());
 		}
 	}
@@ -152,6 +159,7 @@ public class StockServiceImpl implements IStockService {
 		try {
 			return stockRegister.getVolumneWeightedStockPrice(stockSymbols.lookup(stockSymbol), minutes);
 		} catch (StockRegisterException e) {
+			LOGGER.log(Level.FINE,"Get Volumne Weighted Stock Price Exception ["+stockSymbol+" "+minutes+"]:"+e.getErrorCode());
 			throw new StockServiceException(e.getErrorCode());
 		}
 	}
@@ -170,6 +178,7 @@ public class StockServiceImpl implements IStockService {
 		try {
 			return stockRegister.getGBCEAllShareIndex();
 		} catch (StockRegisterException e) {
+			LOGGER.log(Level.FINE,"Get All Share Index Exception"+e.getErrorCode());
 			throw new StockServiceException(e.getErrorCode());
 		}
 	}
